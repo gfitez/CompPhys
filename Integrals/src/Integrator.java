@@ -1,8 +1,8 @@
 public class Integrator {
-    final double a=-1;
+    final double a=0;
     final double b=1;
     public double f(double x){
-        return -Math.pow(x,2)+1;
+        return Math.pow(Math.sin(Math.sqrt(100*x)),2);
     }
     public double riemannSum(int n){
         double h=(b-a)/n;
@@ -25,10 +25,10 @@ public class Integrator {
         }
         return sum;
     }
-    public double adaptiveTrapezoidalSum(int accuracy){
+    public double adaptiveTrapezoidalSum(int times){
         int n=1;
         double sum=trapezoidalSum(n);
-        for(int i=0;i<2;i++){
+        for(int i=0;i<times;i++){
             n*=2;
             double h=(b-a)/n;
             double newSum=0;
@@ -39,10 +39,10 @@ public class Integrator {
         return sum;
 
     }
-    public double romberg(int accuracy){
+    public double romberg(int times){
         int n=1;
         double[] layer=new double[]{trapezoidalSum(n)};
-        for(int i=1;i<10;i++){
+        for(int i=1;i<times;i++){
             n*=2;
             double[] newLayer=new double[layer.length+1];
             newLayer[0]=trapezoidalSum(n);
@@ -53,6 +53,24 @@ public class Integrator {
         }
         return layer[layer.length-1];
     }
-    public double
+    public double gaussianQuadrature(int n){
+        //this is disgusting...
+        double[] x=new X().roots[n];
+        double[] w=new W().roots[n];
+
+        double[] xp=new double[x.length];
+        double[] wp=new double[w.length];
+        for(int i=0;i<x.length;i++){
+            xp[i]=(b-a)/2*x[i]+(a+b)/2;
+            wp[i]=(b-a)/2*w[i];
+
+        }
+        double sum=0;
+        for(int i=0;i<n;i++){
+            sum+=wp[i]*f(xp[i]);
+        }
+        return sum;
+
+    }
 
 }
