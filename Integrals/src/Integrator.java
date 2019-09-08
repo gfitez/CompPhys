@@ -1,8 +1,9 @@
 public class Integrator {
-    final double a=0;
+    final double a=0.1;
     final double b=1;
     public double f(double x){
-        return Math.pow(Math.sin(Math.sqrt(100*x)),2);
+        return Math.sin(1/x);
+        //return Math.pow(Math.sin(Math.sqrt(100*x)),2);
     }
     public double riemannSum(int n){
         double h=(b-a)/n;
@@ -70,6 +71,21 @@ public class Integrator {
             sum+=wp[i]*f(xp[i]);
         }
         return sum;
+
+    }
+    public double secondDerivative(double x){
+        double h=0.000001;
+        return (f(x+h)-2*f(x)+f(x-h))/(h*h);
+    }
+    public double adaptiveAdaptiveTrapezoidal(double error){
+        return computeSlice(a,b,error);
+    }
+    private double computeSlice(double a, double b, double maxError){
+        double oneSlice=(f(a)+f(b))/2*(b-a);
+        double twoSlice=(f(a)+2*f(a+(b-a)/2)+f(b))/4*(b-a);
+        double error=1.0/3*(twoSlice-oneSlice);
+        if(Math.abs(error)<maxError*(b-a)/(this.b-this.a))return twoSlice;
+        else return computeSlice(a,a+(b-a)/2,maxError)+computeSlice(a+(b-a)/2,b,maxError);
 
     }
 
