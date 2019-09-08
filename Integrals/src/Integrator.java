@@ -1,10 +1,13 @@
 public class Integrator {
     final double a=0.1;
     final double b=1;
+    public int samples;
     public double f(double x){
-        return Math.sin(1/x);
-        //return Math.pow(Math.sin(Math.sqrt(100*x)),2);
+        samples++;
+        return Math.pow(Math.sin(Math.sqrt(100*x)),2);
+        //answer =
     }
+    public double answer=0.4558325323090851;//1/400-(20*sin(20)+cos(20)-200)/400
     public double riemannSum(int n){
         double h=(b-a)/n;
         double sum=0;
