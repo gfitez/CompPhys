@@ -6,6 +6,6 @@ public class Main {
         System.out.println(i.adaptiveTrapezoidalSum(10));
         System.out.println(i.romberg(10));
         System.out.println(i.gaussianQuadrature(64));
-        System.out.println(i.answer);
+        System.out.println(i.adaptiveAdaptiveTrapezoidal(0.000000000001));
     }
 }
