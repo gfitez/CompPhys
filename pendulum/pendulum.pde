@@ -47,7 +47,7 @@ void setup(){
   size(500,500); 
 }
 void draw(){
-  for(int i=0;i<100;i++)step();
+  for(int i=0;i<40;i++)step();
   
   background(255);
   float startX=width/2;
