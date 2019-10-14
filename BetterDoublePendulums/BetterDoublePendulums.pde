@@ -124,7 +124,7 @@ class DoublePendulum{
     
     history.add(new HistoryPoint((float)p2x,(float)p2y,c));
     colorMode(RGB,255);
-    //if(history.size()>300)history.remove(0);
+    if(history.size()>300)history.remove(0);
     
   }
   public void drawHistory(){
@@ -169,7 +169,7 @@ void setup(){
   for(int i=0;i<n;i++){
     for(int j=0;j<n;j++){
       dps[j*n+i]=new DoublePendulum(0.6+i*1.4,0.4+j*1.4);
-      dps[j*n+i].m.theta1+=(j*n+i)*0.0001;
+      dps[j*n+i].m.theta1+=(j*n+i)*0.0001*0;
     }
   }
 
@@ -183,7 +183,7 @@ void draw(){
   }
   
   //saveFrame("frames/#######.png");
-  //text(Double.toString(frameRate),10,10);
+  text(Double.toString(dps[0].E()),10,10);
   i++;
   println(i);
   
