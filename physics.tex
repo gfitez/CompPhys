@@ -1,0 +1,177 @@
+\documentclass{report}
+\usepackage{listings}
+\usepackage{mathrsfs}
+
+\begin{document}
+
+
+\title{Computational Physics Notes}
+\author{Grant Fitez}
+\maketitle
+
+\setcounter{chapter}{3}
+\chapter{Accuracy and Speed}
+
+\section {Variables and Ranges}
+
+Covers floating points and integers in python - already known and is somewhat irrelevant if not using python.
+\section {Numerical Error}
+\paragraph{Floating Point Error}
+You cannot directly compare floating points due to rounding errors. Instead use eg. \verb|abs(x-3.3)<epsilon|
+\paragraph{Calculating Error}
+Error will be a random number in the standard deviation $\sigma=Cx$. As an example if $x$ is accurate to within 16 sigfigs, $C\approx10^{-16}$
+\[\sigma=Cx\]
+
+If numbers are added or subtracted, $\sigma = \sqrt{\sigma_{1}^{2}+\sigma_{2}^{2}}$
+
+If numbers are multiplied or divided, $\frac{\sigma}{x^{2}}=\frac{\sigma_{1}^{2}}{x_{1}^{2}}+\frac{\sigma_{2}^{2}}{x_{2}^{2}}$
+
+Using $\sigma=Cx$, $\sigma=\sqrt{C^2x_1^2+C^2x_2^2}=C\sqrt{x_1^2+x_2^2}$
+
+This can be expanded for summing numbers.
+\newline\newline
+When subtracting number which are nearly, sigfigs become very few because the last few digits will get truncated by the computer.
+\section {Program Speed}
+Discusses limitations to a total number of operation. Programs can run about 1 billion ($10^9$) operations. This also limits riemann sums for integration.
+\chapter {Integrals and Derivatives}
+Most integrals cannot be done analytically but almost all can be done by computer.
+\section{Fundamental methods for evaluating integrals}
+\paragraph{Trapezoidal rule} This is the most commonly used method for numerical evaluation of integrals. 
+$A_k\approx\frac12[f(a+(x-1)/h)+f(a+kh)]$. This simply takes each side of the area and averages them for the height. This is a first order integration rule.
+\newline\newline
+The trapezoidal rule serves as a basis for several other rules and more complicated techniques. It fails to work accurately on rapidly varying functions.
+\paragraph {Simpson's Rule} Simpson's rule essentially estimates the area using quadratics instead of trapezoids. The function is sampled at 3 points: $f(-h), 0, f(h)$ 
+\newline
+So we get\newline
+ $f(-h)=Ah^2-Bh+C, f(0)=C,  f(h)=Ah^2+Bh+C$
+\newline\newline
+Solving this system gives: $A=\frac1{h^2}[\frac12f(-h)-f(0)+\frac12f(h)], B=\frac1{2h}[f(h)-f(-h)], C=f(0)$
+\newline\newline
+So now there is the quadratic $Ax^2+Bx+C$ which gives the approximate area. 
+$\int_{-h}^{h}(Ax^2+Bx+C)dx=\frac13h[f(-h)+4f(0)+f(h)]$
+
+
+Simpson's rule often given better results than the trapezoidal rule since it is a 3rd order integration rule.
+	
+\section{Errors on Integrals}
+The main source of error is "approximation error" not rounding error. The \textit{Euler Maclaurin formula} gives error for a trapezoidal rule integral. This involves taking a taylor series at points on the line and integrating the answer to find the max error. (I dont fully understand the math behind it.)
+\newline\newline
+It is important to make sure that h is not so small that rounding error becomes greater than approximation error.
+So for example in the trapezoidal rule: Setting the approximation and rounding error to be equal: $\frac1{12}h^2[f'(a)-f'(b)]\approx C\int_{a}^{b}f(x)dx$
+When setting $h=(b-a)/N$ we get:
+\[N\approx (b-a)\sqrt{\frac{f'(a)-f'(b)}{12\int_{a}^{b}f(x)dx}}C^{-\frac12}\]
+
+This is the same thing but for simpson's rule:
+\[N\approx (b-a)\sqrt[4]{\frac{f'''(a)-f'''(b)}{90\int_{a}^{b}f(x)dx}}C^{-\frac14}\]
+However rounding error can usually be ignored since N will be very large in this equation.
+
+\paragraph{Practical Estimation of Errors}
+The formulas for the previous section allow for calculating error on integrals assuming there is a "closed-form expression of the integrand" so the derivatives can be calculated.
+\newline\newline
+For example, trapezoidal method has an error $O(h^2)$ so halving h will give a quater of the error. So if $I$ is the actual integral, $I_1$ is the integral guess from a trapezoidal sum, and $c$ is a constant, $I=I_1+ch_2^2$,
+\newline And then the next integral where $h_1=2h_2$
+\newline $I_1+ch_1^2=I_2+ch_2^2$
+\newline So now this can be rearranged: $I_2-I_1=ch_1^2-ch_2^2=3ch_2^2$
+\newline\newline This makes the error on the second integral to be $\epsilon_2=ch_2^2=\frac13(I_2-I_1)$
+\newline The equivalent for simpson's rule is:$\epsilon_2=\frac1{15}(I_2-I_1)$
+
+
+\section{Choosing a number of steps}
+One method is adaptive integration. For example, the computer could just start with N steps and keep doubling N and recomputing the integral until desired accuracy is reached. This can be effient because the the new integral calculation can keep the data from the last calculation.
+\section{Romberg Integration}
+Since the leading order error is given by $ch_i^2=\frac13(I_i-I_{i-1})$, a better approximation can be made by plugging in $I_{i-1}$.
+So now the integral is $I=I_i+\frac13(I_i-I_{i-1})+O(h^4)$
+\newline\newline
+Romberg integration is represented by $R_{}$
+\newline
+\newline
+Now we can refine this idea to be Romberg integration.
+\[R_{i,1}=I_i, R_{i,2}=I_i+\frac13(I_i-I_{i-1})=R_{i,1}+\frac13(R_{i,1}-R_{1,1})\]
+So then
+\[I=R_{i,2}+c_2h_i^4+O(h_i^6)\]
+I'm not fully sure how the rest works but we can continue this until the error is $O(h_i^{2m+2})$. The general form is:
+\[R_{i,m+1}=R_{i,m}+\frac1{4^m-1}(R_{i,m}-R_{i-1,m})\]
+
+\paragraph{Summary of Romberg integration}
+\begin{enumerate}
+	\item Calculate two integral estimates using trapezoidal integration. $I_1=R_{1,1}$ and $I_2=R_{2,1}$
+	\item Use the two integrals to calculate $R_{2,2}$ using the following equation.
+	\[R_{i,m+1}=R_{i,m}+\frac1{4^m-1}(R_{i,m}-R_{i-1,m})\]
+	\item Next calculate $I_3=R_{3,1}$ and then calculate $R_{3,2}$ and $R_{3,3}$
+	\item Repeat this over and over, calculating one new trapezoidal integral each time and then computing $R_{i,2} ... R_{i,i}$
+	\item The error at a given step can be represented by the following...
+	\[c_mh_i^{2m}=\frac1{4^m-1}(R_{i,m}-R_{i-1,m}+O(h_i^(2m+2)))\]
+\end{enumerate}
+\paragraph{My code for romberg integration:}
+\begin{verbatim}
+public float romberg(float accuracy){
+ int n=2;
+ float[] layer=new float[]{trapezoidalSum(n)};
+ for(int i=1;i<4;i++){
+  n*=2;
+  float[] newLayer=new float[layer.length+1];
+  newLayer[0]=trapezoidalSum(n);
+  for(int m=1;m<newLayer.length;m++){
+   //this is a little messy because i have to subtract 1 from m when indexing but not when using 
+   newLayer[m]=newLayer[m-1]+1/((float)Math.pow(4,m)-1)*(newLayer[m-1]-layer[m-1]);
+  }
+  layer=newLayer;
+ }
+ return layer[layer.length-1];
+}
+\end{verbatim}
+
+\section{Higher order integration methods}
+Since simpson's rule will get a perfect answer for quadratics and trapezoidal integration for straight lines, this can be expanded so that any degree polynomial can be used. The basic idea is always:
+\[\int_a^bf(x)dx\approx\sum_{k=1}^{N}w_kf(x_k)\]
+This is basically just sampling a point and multiplying it by a weight
+\section{Gaussian Quadrature}
+\paragraph{Nonuniform sample points}
+I don't understand the math fully but essentially you just create a polynomial that runs through all the points using:
+\[\phi_k(x)=\prod_{m=1\linebreak m\ne k}^{N} \frac{x-x_m}{x_k-x_m}\]
+Now this polynomial can be integrated
+\paragraph{Gaussian quadrature}
+Essentially there is just a program that contains sample points and weights to make this gaussian quadrature work. The book doesn't go into too much detail and just uses a library for this.
+\paragraph{Error} The error is equal to $\frac c{N^2}$ so it converges super quickly. However it is impractical to calculate because when doubling N, you can't use the data from old calculations like in Romberg integration.
+\section{Choosing An Integration Method}
+Romberg and Gaussian will give good answers using relatively few sample points. The trapezoidal rule is good for crazy functions and can use uneven sample points. Gaussian works poorly for crazy integrals.
+\section{Integrals over infinite ranges}
+This basically works by using some tricks to put the integral in a non-infinte form. If the integral is form $\inf$ to $-\inf$ split it into two integrals on the opposite sides of 0.
+\section {Multiple Integrals}
+This essentially means
+\[I=\int_0^1\int_0^1f(x,y)dx dy\]
+One simple way is just to evaluate the inner integral for each sample in the outer integral. Or it can be thought of as:
+\[I\approx\sum_{i=1}^N\sum_{j=1}^Nw_iw_jf(x_i,y_y)\]
+There are a lot of methods to sample this and or do Gaussian quadrature. Another way is just to sample random points aka Monte Carlo integration.
+
+2d integrals can also have a crazy domain (more than just a rectangle).
+\section {Derivatives}
+Numerical derivatives are a lot more simple than integrals. Also it's pretty easy and usually derivatives can be done analytically anyway.
+\newline2
+Just use the limit definition of the derivative and plug in a small h. It is important to note that this makes a difference whether h is positive or negative.
+\paragraph{Errors}
+One big issue is that subtracting f(x) and f(x+h), rounding errors become very prominent when h is too small. The worst rounding error will be $\frac{2C|f(x)|}h$. The approximation error is $\frac12hf''(x)$
+Adding these to get the error and finding the min gives:
+\[\epsilon=h|f''(x)|=\sqrt{4C|f(x)f''(x)|}\]
+\paragraph{Central differences}
+This gives better error
+\[\frac{df}{dx}\approx\frac{f(x+h/2)-f(x-h/2)}{h}\]
+Using the same logic as above:
+\[\epsilon =\frac18h^2|f'''(x)|=(\frac98C^2f(x)^2f'''(x))^{\frac13}\]
+\paragraph{Higher order derivatives}
+Another good way is to do what happened in the integration techniques and fit polynomial to take the derivative.
+\paragraph{Noisy Data}
+A big problem is noisy data. The derivatives will often amplify this. Some ways to fix this are.
+\begin{enumerate}
+	\item Bigger h
+	\item Factor in sampling error  to calculate an optimal h
+	\item curve fit
+	\item smooth the data first
+\end{enumerate}
+
+\[
+\frac{d}{dt} \frac{\partial\mathscr{L}}{\partial\dot x}=\frac{\partial\mathscr{L}}{\partial x}
+\]
+
+
+\end{document}
