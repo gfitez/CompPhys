@@ -13,15 +13,17 @@ y =[]
 z = []
 
 with open("positions.txt") as tsvfile:
-  reader = csv.reader(tsvfile, delimiter=',')
+  reader = csv.reader(tsvfile, delimiter=' ')
   i=0;
   for row in reader:
     #print(i)
     i+=1;
-    if(float(row[0])>2.5 and float(row[1])>2.5):
-        x.append(float(row[0]))
-        y.append(float(row[1]))
-        z.append(min(float(row[2]),0.5))
+    if(float(row[1])>2 and float(row[3])>3.5):
+        x.append(float(row[1]))
+        y.append(float(row[3]))
+
+        z.append(min(float(row[4]),0.01))
+        #z.append(int(float(row[4])>0.01))
 
 
 # create data
