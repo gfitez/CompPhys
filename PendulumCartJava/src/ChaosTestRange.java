@@ -40,9 +40,13 @@ public class ChaosTestRange /**extends Thread**/ {
 
                             bw.write(x0 + " " + xDot0 + " " + theta0 + " " + thetaDot0 + " " + c.run() + "\n");
                         }
-                        bw.flush();
+
+
                     }
+
                 }
+                bw.flush();
+                System.out.println(xDot0);
             }
 
         }catch( IOException e){

@@ -22,7 +22,7 @@ with open("positions.txt") as tsvfile:
         x.append(float(row[1]))
         y.append(float(row[3]))
 
-        z.append(min(float(row[4]),0.01))
+        z.append(min(float(row[4]),10))
         #z.append(int(float(row[4])>0.01))
 
 
