@@ -7,7 +7,7 @@ public class System{
   final double M=1;//weight of upper mass
   final double m=1;//weight of lower Mass
   final double g=9.8;//acceleration due to gravity
-   double h=0.1;//delta time
+   double h=0.01;//delta time
   double time=0;
   public System(){
     mot=new Motion();
@@ -227,17 +227,19 @@ public void setup(){
 
    //noLoop();
    
-   initialEnergy=s.E();
-   for(double xDot0=2.5;xDot0<5;xDot0+=0.01){
-     for(double thetaDot0=2.5; thetaDot0<5; thetaDot0+=0.01){
-       output.println(xDot0+", "+thetaDot0+", "+chaosTest(0,0,xDot0,thetaDot0,0.0005));
-       println(xDot0+", "+thetaDot0);
-     }
-     
-   }
+ //initialEnergy=s.E();
+ //for(double xDot0=2.5;xDot0<5;xDot0+=0.01){
+ //for(double thetaDot0=2.5; thetaDot0<5; thetaDot0+=0.01){
+ //  output.println(xDot0+", "+thetaDot0+", "+chaosTest(0,0,xDot0,thetaDot0,0.0005));
+ //  println(xDot0+", "+thetaDot0);
+ //}
+ 
+ //}
    output.flush(); // Writes the remaining data to the file
     output.close(); // Finishes the file
     
+    s.mot.xDot=8;
+    s.mot.thetaDot=-1;
 }
 
 
@@ -250,7 +252,7 @@ public void draw(){
   text((float)s.time, width/2, height/10);
   //while(time*3000<System.currentTimeMillis()-start){
   
-  for(int i=0;i<10;i++){
+  for(int i=0;i<3;i++){
     //euler();
     //print(xDDot+f(s).xDDot+" ");
     s.rk4();
