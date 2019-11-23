@@ -12,7 +12,7 @@ x = []
 y =[]
 z = []
 
-with open("xDot2-5, thetaDot2-5 high res.txt") as tsvfile:
+with open("0.0 0.0 -25.0 -25.0.txt") as tsvfile:
   reader = csv.reader(tsvfile, delimiter=' ')
   i=0;
   for row in reader:
@@ -44,10 +44,10 @@ def tD2(xD,E):#find thetaDot from xDot and energy
 
 
 axes = plt.gca()
-axes.set_xlim([2,5])
-axes.set_ylim([2,5])
+#axes.set_xlim([2,5])
+#axes.set_ylim([2,5])
 # use the scatter function
-plt.scatter(x, y, alpha=0.5, s=2,c=z,cmap=cm.coolwarm)
+plt.scatter(x, y, alpha=0.5, s=20,c=z,cmap=cm.coolwarm)
 if(False):
 
     data=np.linspace(-100,100,10000)# teh xdot inputs for tD
@@ -57,7 +57,7 @@ if(False):
         plt.plot(data,[tD2(x,E) for x in data],"w")
 plt.xlabel("xDot0")
 plt.ylabel("thetaDot0")
-plt.title("ln(chaos)")
+plt.title("ln(chaos), M=1, m=1.5")
 # z.sort()
 # for i in range(len(z)):
 #     z[i]=min(z[i],0.001)
