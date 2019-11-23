@@ -33,10 +33,11 @@ public class ChaosTestRange /**extends Thread**/ {
 
             for (double xDot0 = min.xDot; xDot0 < max.xDot + step / 2; xDot0 += step) {
                 for (double thetaDot0 = min.thetaDot; thetaDot0 < max.thetaDot + step / 2; thetaDot0 += step) {
-                    for (double x0 = min.x; x0 < max.x + step / 2; x0 += step) {
+                    for (double x0 = min.x; x0 < max.x + step / 2; x0 += step/5) {
 
                         for (double theta0 = min.theta; theta0 < max.theta + step / 2; theta0 += step) {
-                            ChaosTest c = new ChaosTest(new Motion(x0, xDot0, theta0, thetaDot0));
+                            ChaosTestTemp c = new ChaosTestTemp(new Motion(x0, xDot0, theta0, thetaDot0));
+                            //TODO: change back to chaostest
 
                             bw.write(x0 + " " + xDot0 + " " + theta0 + " " + thetaDot0 + " " + c.run() + "\n");
                         }
