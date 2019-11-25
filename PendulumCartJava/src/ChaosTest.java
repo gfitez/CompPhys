@@ -52,7 +52,7 @@ public class ChaosTest {
 
     }
     public Motion runSystem(Sys s){
-        while(s.time<s.period*5*5)s.rk4();
+        while(s.time<s.period*5)s.rk4();
         return s.mot;
     }
 }

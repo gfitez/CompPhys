@@ -238,8 +238,9 @@ public void setup(){
    output.flush(); // Writes the remaining data to the file
     output.close(); // Finishes the file
     
-    s.mot.xDot=8;
-    s.mot.thetaDot=-1;
+    s.mot.xDot=10;
+    s.mot.thetaDot=-20;
+    frameRate(100);
 }
 
 
@@ -252,7 +253,7 @@ public void draw(){
   text((float)s.time, width/2, height/10);
   //while(time*3000<System.currentTimeMillis()-start){
   
-  for(int i=0;i<3;i++){
+  for(int i=0;i<1;i++){
     //euler();
     //print(xDDot+f(s).xDDot+" ");
     s.rk4();
@@ -263,7 +264,7 @@ public void draw(){
   }
   //println(E());
   //println((E()-initialEnergy)/E()*100+"%");
-  //saveFrame();
+  saveFrame();
   
     
 }

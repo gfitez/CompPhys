@@ -21,7 +21,7 @@ public class OverTopTestRange /**extends Thread**/ {
         try {
             BufferedWriter bw;
 
-            File file = new File(min.x + " " + min.theta + " " + min.xDot + " " + min.thetaDot + ".txt");
+            File file = new File("top "+min.x + " " + min.theta + " " + min.xDot + " " + min.thetaDot + ".txt");
 
             if (!file.exists()) {
                 file.createNewFile();
@@ -39,9 +39,9 @@ public class OverTopTestRange /**extends Thread**/ {
                         for (double theta0 = min.theta; theta0 < max.theta + step / 2; theta0 += step) {
                             //OverTopTest c = new OverTopTest(new Motion(x0, xDot0, theta0, thetaDot0));
                             Sys s=new Sys(new Motion(x0,xDot0,theta0,thetaDot0));
-                            while(s.time<s.period*5*5)s.rk4();
+                            while(s.time<s.period*5)s.rk4();
 
-                            bw.write("top: "+x0 + " " + xDot0 + " " + theta0 + " " + thetaDot0 + " " + s.overTop + "\n");
+                            bw.write(x0 + " " + xDot0 + " " + theta0 + " " + thetaDot0 + " " + s.overTop + "\n");
                         }
 
 

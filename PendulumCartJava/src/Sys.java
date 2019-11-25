@@ -2,7 +2,7 @@ public class Sys {
     Motion mot;
     final double l=1;//length of Pendulum
     double M=1;//weight of upper mass
-    double m=1.5;//weight of lower Mass
+    double m=1;//weight of lower Mass
     final double g=9.8;//acceleration due to gravity
     double h=0.01;//delta time
     double time=0;
@@ -56,10 +56,12 @@ public class Sys {
         Motion k4=f(mot.add(k3)).mult(h);
 
         double oldX=this.mot.x;
+        double oldXDot=this.mot.xDot;
         this.mot=this.mot.add((k1.add(k2.mult(2)).add(k3.mult(2)).add(k4)).mult(1.0/6));
         double newX=this.mot.x;
 
-        if((oldX-Math.PI)%(2*Math.PI)>(newX-Math.PI)%(2*Math.PI))overTop++;
+        if((oldX-Math.PI)%(2*Math.PI)>(newX-Math.PI)%(2*Math.PI) && this.mot.xDot>0 && oldXDot>0)overTop++;
+        else if((oldX-Math.PI)%(2*Math.PI)<(newX-Math.PI)%(2*Math.PI) && this.mot.xDot<0 && oldXDot<0)overTop++;
 
         time+=h;
     }
